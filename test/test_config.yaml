@@ -1,0 +1,20 @@
+# Feature generation
+dependent_cols:
+  - visible_max
+  - visible_min
+  - visible_mean
+  - visible_entropy
+  - visible_contrast
+  - IR_min
+  - IR_max
+
+new_features:
+  - visible_range
+  - visible_norm_range
+  - log_entropy
+  - entropy_x_contrast
+  - IR_range
+  - IR_norm_range
+
+expected_auc: 0.999 
+expected_accuracy: 0.976 

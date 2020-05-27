@@ -1,0 +1,36 @@
+url: https://archive.ics.uci.edu/ml/machine-learning-databases/undocumented/taylor/cloud.data
+
+clean:
+  c1_start_ix: 53
+  c1_end_ix: 1077
+  c2_start_ix: 1082
+  c2_end_ix: 2105
+  column_names:
+    - visible_mean
+    - visible_max
+    - visible_min
+    - visible_mean_distribution
+    - visible_contrast
+    - visible_entropy
+    - visible_second_angular_momentum
+    - IR_mean
+    - IR_max
+    - IR_min
+
+features:
+  - visible_norm_range
+  - log_entropy
+  - IR_mean
+  - entropy_x_contrast
+  - IR_norm_range
+  - visible_mean
+
+train_test_split:
+  test_size: 0.4
+  random_state: 423
+
+lr_config:
+  fit_intercept: False
+  penalty: 'l1'
+  random_state: 423
+  solver: 'liblinear'
