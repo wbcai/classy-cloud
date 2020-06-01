@@ -5,8 +5,8 @@ import pandas as pd
 
 from sklearn import model_selection
 
-from src.data_prep import get_raw_data, clean_data, create_features
-from src.modeling import fit_logistic_regression, get_model_metrics
+from src.data_prep import *
+from src.modeling import *
 
 
 logging.basicConfig(format='%(name)-12s %(levelname)-8s %(message)s', level=logging.DEBUG)
@@ -38,13 +38,32 @@ if __name__ == '__main__':
 		clean_data(args.input, args.output, **config['clean'])
 
 	elif args.step == 'featurize':
-		data_df = pd.read_csv(args.input)
-		create_features(data_df, args.output)
+
+		# Read clean dataframe
+		features = pd.read_csv(args.input)
+
+		# Create additional features
+		features = create_visible_range(features)
+		features = create_visible_norm_range(features)
+		features = create_log_entropy(features)
+		features = create_entropy_x_contrast(features)
+		features = create_IR_range(features)
+		features = create_IR_norm_range(features)
+
+		# Export updated dataframe
+		features.to_csv(args.output)
 
 	elif args.step == 'test':
+
+		# Get list of modeling features based on intersection of 
+		# expected and available features
 		features_df = pd.read_csv(args.input)
-		features = config['features']
-		X = features_df[features]
+		all_features = config['features']
+		available_features = features_df.columns.tolist()
+		model_features = list(set(available_features) & set(all_features))
+
+		# Create dataframes/series for features and labels
+		X = features_df[model_features]
 		y = features_df["class"]
 
 		# Split data into training and testing
@@ -58,9 +77,15 @@ if __name__ == '__main__':
 		get_model_metrics(X_test, y_test, lr, args.output)
 
 	elif args.step == 'fit':
+		# Get list of modeling features based on intersection of 
+		# expected and available features
 		features_df = pd.read_csv(args.input)
-		features = config['features']
-		X = features_df[features]
+		all_features = config['features']
+		available_features = features_df.columns.tolist()
+		model_features = list(set(available_features) & set(all_features))
+
+		# Create dataframes/series for features and labels
+		X = features_df[model_features]
 		y = features_df["class"]
 
 		# Fit with full data

@@ -17,4 +17,4 @@ new_features:
   - IR_norm_range
 
 expected_auc: 0.999 
-expected_accuracy: 0.976 
+expected_accuracy: 0.972
